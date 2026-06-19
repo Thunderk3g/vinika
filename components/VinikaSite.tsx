@@ -10,6 +10,7 @@ import {
 import Lenis from "lenis";
 import gsap from "gsap";
 import ImageSlot from "./ImageSlot";
+import Loader from "./Loader";
 import {
   about,
   articles,
@@ -67,7 +68,6 @@ function AccordionList({
 
 export default function VinikaSite() {
   const rootRef = useRef<HTMLDivElement>(null);
-  const loaderRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
   const dotRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
@@ -140,10 +140,6 @@ export default function VinikaSite() {
     let raf = 0;
     let lraf = 0;
     let revInt = 0;
-
-    const hideLoader = () =>
-      loaderRef.current?.classList.add("vk-hide-loader");
-    const loadFb = setTimeout(hideLoader, 2800);
 
     const countUp = (el: HTMLElement) => {
       if ((el as any).__d) return;
@@ -328,7 +324,6 @@ export default function VinikaSite() {
     addEventListener("mousemove", onMove);
 
     updateTheme();
-    setTimeout(hideLoader, 1500);
 
     /* render loop */
     const lp = (a: number, b: number, t: number) => a + (b - a) * t;
@@ -376,7 +371,6 @@ export default function VinikaSite() {
 
     return () => {
       clearInterval(revInt);
-      clearTimeout(loadFb);
       clearTimeout(rebindT);
       cancelAnimationFrame(raf);
       cancelAnimationFrame(lraf);
@@ -400,66 +394,8 @@ export default function VinikaSite() {
         cursor: "none",
       }}
     >
-      {/* LOADER */}
-      <div
-        ref={loaderRef}
-        style={{
-          position: "fixed",
-          inset: 0,
-          zIndex: 200,
-          background: "var(--navy)",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 20,
-          transition: "opacity .55s ease",
-        }}
-      >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/assets/logo-white.png"
-          alt="Vinika"
-          style={{
-            height: "clamp(26px,4.6vw,44px)",
-            width: "auto",
-            opacity: 0,
-            animation: "vk-loadfade .8s ease forwards",
-          }}
-        />
-        <div
-          style={{
-            height: 4,
-            background: "var(--amber)",
-            width: 0,
-            animation: "vk-loadbar 1.3s cubic-bezier(.66,0,.2,1) .15s forwards",
-          }}
-        />
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 10,
-            fontSize: "10.5px",
-            letterSpacing: ".34em",
-            textTransform: "uppercase",
-            color: "rgba(245,225,200,.7)",
-            opacity: 0,
-            animation: "vk-loadfade .8s ease .5s forwards",
-          }}
-        >
-          <span
-            style={{
-              width: 6,
-              height: 6,
-              borderRadius: "50%",
-              background: "var(--amber)",
-              animation: "vk-loaddot 1.1s ease-in-out infinite",
-            }}
-          />
-          Elevate · Expand · Excel
-        </div>
-      </div>
+      {/* LOADER — compulsory VINIKA Reveal intro + asset preload */}
+      <Loader />
 
       {/* CURSOR */}
       <div

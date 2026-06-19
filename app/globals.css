@@ -79,6 +79,35 @@ body {
   pointer-events: none !important;
 }
 
+/* ---------- IMAGE SKELETON ---------- */
+@keyframes vk-shimmer {
+  0% {
+    background-position: -150% 0;
+  }
+  100% {
+    background-position: 150% 0;
+  }
+}
+.vk-skel {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0.04) 30%,
+    rgba(255, 255, 255, 0.12) 50%,
+    rgba(255, 255, 255, 0.04) 70%
+  );
+  background-size: 220% 100%;
+  animation: vk-shimmer 1.4s ease-in-out infinite;
+}
+
+/* ---------- BIG DISPLAY TYPE: loosen the cramped Anton headings ---------- */
+.vk-huge {
+  letter-spacing: 0.006em !important;
+  line-height: 0.92 !important;
+  word-spacing: 0.04em;
+}
+
 /* ---------- PROCESS STEPS (hover reveal) ---------- */
 .vk-step {
   position: relative;

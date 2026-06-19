@@ -30,7 +30,9 @@ export default function ImageSlot({
   className,
 }: ImageSlotProps) {
   const [failed, setFailed] = useState(false);
+  const [loaded, setLoaded] = useState(false);
   const showImg = !!src && !failed;
+  const showSkeleton = showImg && !loaded;
   return (
     <div
       className={className}
@@ -44,17 +46,21 @@ export default function ImageSlot({
         ...style,
       }}
     >
+      {showSkeleton && <div className="vk-skel" />}
       {showImg ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
           src={src}
           alt={alt}
+          onLoad={() => setLoaded(true)}
           onError={() => setFailed(true)}
           style={{
             width: "100%",
             height: "100%",
             objectFit: "cover",
             display: "block",
+            opacity: loaded ? 1 : 0,
+            transition: "opacity .6s ease",
           }}
         />
       ) : (
