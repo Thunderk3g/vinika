@@ -28,6 +28,9 @@ const anton: CSSProperties = {
 
 const PAD = "clamp(18px,3.5vw,46px)";
 
+/** Number of generated results-strip images (vk-strip-0 … N-1), cycled across the 14 cells. */
+const STRIP_COUNT = 9;
+
 /* ---------------- Accordion (about / faq) ---------------- */
 function AccordionList({
   items,
@@ -962,7 +965,11 @@ export default function VinikaSite() {
                   boxShadow: "0 30px 70px rgba(10,49,101,.25)",
                 }}
               >
-                <ImageSlot placeholder="Drop a photo or video still" />
+                <ImageSlot
+                  src="/assets/vk-approach.jpg"
+                  alt="How Vinika works"
+                  placeholder="Drop a photo or video still"
+                />
                 <div
                   style={{
                     position: "absolute",
@@ -1090,7 +1097,12 @@ export default function VinikaSite() {
                   zIndex: i + 1,
                 }}
               >
-                <ImageSlot placeholder="Drop a deliverable" bg="rgba(0,0,0,.18)" />
+                <ImageSlot
+                  src={`/assets/vk-method-${i}.jpg`}
+                  alt={`Vinika deliverable ${i + 1}`}
+                  placeholder="Drop a deliverable"
+                  bg="rgba(0,0,0,.18)"
+                />
               </div>
             ))}
           </div>
@@ -1323,7 +1335,12 @@ export default function VinikaSite() {
                   aspectRatio: "4/5",
                 }}
               >
-                <ImageSlot placeholder="" bg="rgba(255,255,255,.12)" />
+                <ImageSlot
+                  src={`/assets/vk-strip-${i % STRIP_COUNT}.jpg`}
+                  alt=""
+                  placeholder=""
+                  bg="rgba(255,255,255,.12)"
+                />
               </div>
             ))}
           </div>
@@ -1535,7 +1552,11 @@ export default function VinikaSite() {
                   boxShadow: "0 30px 70px rgba(10,49,101,.22)",
                 }}
               >
-                <ImageSlot placeholder="Drop a team photo" />
+                <ImageSlot
+                  src="/assets/vk-story.jpg"
+                  alt="The Vinika team"
+                  placeholder="Drop a team photo"
+                />
                 <div
                   style={{
                     position: "absolute",
@@ -1681,6 +1702,8 @@ export default function VinikaSite() {
                   }}
                 >
                   <ImageSlot
+                    src={`/assets/vk-insight-${i}.jpg`}
+                    alt={a.title}
                     placeholder="Drop article image"
                     bg="rgba(245,225,200,.08)"
                   />

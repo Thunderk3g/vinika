@@ -1,6 +1,6 @@
 "use client";
 
-import { CSSProperties } from "react";
+import { CSSProperties, useState } from "react";
 
 type ImageSlotProps = {
   /** When provided, the image is shown. Otherwise a styled placeholder renders. */
@@ -29,6 +29,8 @@ export default function ImageSlot({
   style,
   className,
 }: ImageSlotProps) {
+  const [failed, setFailed] = useState(false);
+  const showImg = !!src && !failed;
   return (
     <div
       className={className}
@@ -38,15 +40,16 @@ export default function ImageSlot({
         height: "100%",
         overflow: "hidden",
         borderRadius: radius,
-        background: src ? "transparent" : bg,
+        background: showImg ? "transparent" : bg,
         ...style,
       }}
     >
-      {src ? (
+      {showImg ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
           src={src}
           alt={alt}
+          onError={() => setFailed(true)}
           style={{
             width: "100%",
             height: "100%",
