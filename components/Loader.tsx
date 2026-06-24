@@ -28,18 +28,30 @@ export default function Loader() {
   const [removed, setRemoved] = useState(false);
   const mountedAt = useRef<number>(0);
 
-  // stamp mount time + lock scroll while the loader is up
+  // stamp mount time once
   useEffect(() => {
     mountedAt.current = Date.now();
-    const prevHtml = document.documentElement.style.overflow;
-    const prevBody = document.body.style.overflow;
-    document.documentElement.style.overflow = "hidden";
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.documentElement.style.overflow = prevHtml;
-      document.body.style.overflow = prevBody;
-    };
   }, []);
+
+  // Lock scroll while the loader is up; ALWAYS release (to "") the moment it
+  // starts leaving or unmounts. Restoring a captured previous value is unsafe —
+  // under double-mount the "previous" value can be "hidden", which would leave
+  // the page permanently unscrollable.
+  useEffect(() => {
+    const root = document.documentElement;
+    const body = document.body;
+    if (leaving || removed) {
+      root.style.overflow = "";
+      body.style.overflow = "";
+      return;
+    }
+    root.style.overflow = "hidden";
+    body.style.overflow = "hidden";
+    return () => {
+      root.style.overflow = "";
+      body.style.overflow = "";
+    };
+  }, [leaving, removed]);
 
   // preload images
   useEffect(() => {

@@ -6,19 +6,38 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx lib/db/migrate.ts",
+    "db:seed": "tsx lib/db/seed.ts"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.12.0",
+    "@supabase/supabase-js": "^2.108.2",
+    "dotenv": "^17.4.2",
+    "drizzle-orm": "^0.45.2",
     "gsap": "^3.12.5",
     "lenis": "^1.1.18",
+    "marked": "^18.0.5",
     "next": "^15.1.6",
+    "nodemailer": "^9.0.1",
+    "postgres": "^3.4.9",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "sanitize-html": "^2.17.5",
+    "server-only": "^0.0.1",
+    "three": "^0.184.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/node": "^22.10.7",
+    "@types/nodemailer": "^8.0.1",
     "@types/react": "^19.0.7",
     "@types/react-dom": "^19.0.3",
+    "@types/sanitize-html": "^2.16.1",
+    "@types/three": "^0.184.1",
+    "drizzle-kit": "^0.31.10",
+    "tsx": "^4.22.4",
     "typescript": "^5.7.3"
   }
 }
