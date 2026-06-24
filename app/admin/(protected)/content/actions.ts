@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { getSessionUser } from "@/lib/supabase/server";
+import { getAdminUser } from "@/lib/supabase/server";
 import { db } from "@/lib/db";
 import { siteContent } from "@/lib/db/schema";
 import { SECTION_SPECS } from "@/lib/admin/content-spec";
@@ -16,8 +16,8 @@ export async function saveSectionAction(
   key: string,
   value: unknown,
 ): Promise<ActionResult> {
-  const user = await getSessionUser();
-  if (!user) return { ok: false, error: "Not authenticated." };
+  const user = await getAdminUser();
+  if (!user) return { ok: false, error: "Not authorized." };
 
   if (!VALID_KEYS.has(key)) {
     return { ok: false, error: "Unknown section." };

@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { and, eq, ne } from "drizzle-orm";
 import { z } from "zod";
-import { getSessionUser } from "@/lib/supabase/server";
+import { getAdminUser } from "@/lib/supabase/server";
 import { db } from "@/lib/db";
 import { blogPosts } from "@/lib/db/schema";
 
@@ -44,8 +44,8 @@ function revalidateBlog(slug?: string) {
 export async function createPostAction(
   input: BlogFormInput,
 ): Promise<ActionResult<{ id: string }>> {
-  const user = await getSessionUser();
-  if (!user) return { ok: false, error: "Not authenticated." };
+  const user = await getAdminUser();
+  if (!user) return { ok: false, error: "Not authorized." };
 
   const parsed = postSchema.safeParse(input);
   if (!parsed.success) {
@@ -89,8 +89,8 @@ export async function updatePostAction(
   id: string,
   input: BlogFormInput,
 ): Promise<ActionResult> {
-  const user = await getSessionUser();
-  if (!user) return { ok: false, error: "Not authenticated." };
+  const user = await getAdminUser();
+  if (!user) return { ok: false, error: "Not authorized." };
 
   const parsed = postSchema.safeParse(input);
   if (!parsed.success) {
@@ -142,8 +142,8 @@ export async function updatePostAction(
 }
 
 export async function deletePostAction(id: string): Promise<ActionResult> {
-  const user = await getSessionUser();
-  if (!user) return { ok: false, error: "Not authenticated." };
+  const user = await getAdminUser();
+  if (!user) return { ok: false, error: "Not authorized." };
   try {
     const [row] = await db
       .delete(blogPosts)

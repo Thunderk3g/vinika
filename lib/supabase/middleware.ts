@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { isAdminEmail } from "@/lib/admin-allowlist";
 
 const URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const KEY = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!;
@@ -31,18 +32,21 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  // Authenticated is NOT enough — the user must be on the admin allowlist.
+  const admin = isAdminEmail(user?.email);
+
   const { pathname } = request.nextUrl;
-  const isAdmin = pathname.startsWith("/admin");
+  const isAdminPath = pathname.startsWith("/admin");
   const isLogin = pathname === "/admin/login";
 
-  if (isAdmin && !isLogin && !user) {
+  if (isAdminPath && !isLogin && !admin) {
     const url = request.nextUrl.clone();
     url.pathname = "/admin/login";
     url.searchParams.set("redirect", pathname);
     return NextResponse.redirect(url);
   }
 
-  if (isLogin && user) {
+  if (isLogin && admin) {
     const url = request.nextUrl.clone();
     url.pathname = "/admin";
     url.search = "";

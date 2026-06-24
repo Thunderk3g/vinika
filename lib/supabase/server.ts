@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { isAdminEmail } from "@/lib/admin-allowlist";
 
 const URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const KEY = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!;
@@ -25,11 +26,20 @@ export async function createSupabaseServerClient() {
   });
 }
 
-/** Returns the authenticated admin user, or null. */
+/** Returns the authenticated user, or null. */
 export async function getSessionUser() {
   const supabase = await createSupabaseServerClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
   return user;
+}
+
+/**
+ * Returns the user only if they are authenticated AND on the admin allowlist.
+ * Use this (not getSessionUser) to gate every privileged admin action.
+ */
+export async function getAdminUser() {
+  const user = await getSessionUser();
+  return user && isAdminEmail(user.email) ? user : null;
 }
