@@ -679,3 +679,42 @@ body {
     grid-template-columns: 1fr !important;
   }
 }
+
+/* ======================================================================
+   MOBILE FIXES
+   ====================================================================== */
+
+/* iOS zooms the page when a focused input has font-size < 16px. Force 16px on
+   small screens across all inputs (overrides inline styles in the chat widget,
+   contact form, and admin). */
+@media (max-width: 600px) {
+  input,
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
+
+/* Wide admin data tables scroll horizontally inside their card instead of
+   stretching the whole page on phones. Grid/flex children default to
+   min-width:auto (won't shrink below content) — set min-width:0 so the table's
+   overflow-x:auto wrapper actually scrolls instead of widening the layout. */
+.adm-shell > *,
+.adm-main {
+  min-width: 0;
+}
+.adm-tablewrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.adm-tablewrap .adm-table {
+  min-width: 520px;
+}
+
+/* Tighten section vertical padding a touch on very small screens. */
+@media (max-width: 480px) {
+  .adm-main {
+    padding: 18px 16px;
+  }
+}

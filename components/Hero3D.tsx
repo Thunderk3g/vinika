@@ -81,7 +81,9 @@ export default function Hero3D() {
       alpha: true,
       antialias: true,
     });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    const dpr = window.devicePixelRatio || 1;
+    // Lower the pixel-ratio cap on small/mobile screens to cut GPU fill cost.
+    renderer.setPixelRatio(Math.min(dpr, window.innerWidth <= 768 ? 1.5 : 2));
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(44, 1, 0.1, 100);
@@ -220,12 +222,27 @@ export default function Hero3D() {
     canvas.addEventListener("pointerleave", onLeave);
     window.addEventListener("wheel", onWheel, { passive: true });
 
+    // Pause the render loop when the hero scrolls off-screen to save battery/GPU.
+    let visible = true;
+    let observer: IntersectionObserver | null = null;
+    if (typeof IntersectionObserver === "function") {
+      observer = new IntersectionObserver(
+        (entries) => {
+          visible = entries[0]?.isIntersecting ?? true;
+        },
+        { threshold: 0 },
+      );
+      observer.observe(canvas);
+    }
+
     let lastW = 0;
     let lastH = 0;
     let raf = 0;
 
     const frame = () => {
       raf = requestAnimationFrame(frame);
+      // While hidden, keep the rAF alive but skip all render/raycast work so it idles cheaply.
+      if (!visible) return;
       const t = clock.getElapsedTime();
       const cw = parent.clientWidth || window.innerWidth || 1;
       const ch = parent.clientHeight || window.innerHeight || 1;
@@ -275,6 +292,7 @@ export default function Hero3D() {
     return () => {
       unmounted = true;
       cancelAnimationFrame(raf);
+      observer?.disconnect();
       canvas.removeEventListener("pointermove", onPointerMove);
       canvas.removeEventListener("pointerdown", onPointerDown);
       window.removeEventListener("pointerup", onPointerUp);

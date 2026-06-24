@@ -38,6 +38,7 @@ export default async function BlogListPage() {
         {posts.length === 0 ? (
           <div style={{ padding: 28, color: "var(--muted)" }}>No posts yet.</div>
         ) : (
+          <div className="adm-tablewrap">
           <table className="adm-table">
             <thead>
               <tr>
@@ -68,6 +69,7 @@ export default async function BlogListPage() {
               ))}
             </tbody>
           </table>
+          </div>
         )}
       </div>
     </div>

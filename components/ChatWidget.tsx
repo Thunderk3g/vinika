@@ -134,8 +134,8 @@ export default function ChatWidget() {
           onClick={() => setOpen(true)}
           style={{
             position: "fixed",
-            right: "clamp(16px,3vw,28px)",
-            bottom: "clamp(16px,3vw,28px)",
+            right: "calc(clamp(16px,3vw,28px) + env(safe-area-inset-right, 0px))",
+            bottom: "calc(clamp(16px,3vw,28px) + env(safe-area-inset-bottom, 0px))",
             zIndex: 200,
             display: "inline-flex",
             alignItems: "center",
@@ -164,11 +164,13 @@ export default function ChatWidget() {
         <div
           style={{
             position: "fixed",
-            right: "clamp(12px,3vw,28px)",
-            bottom: "clamp(12px,3vw,28px)",
+            right: "calc(clamp(12px,3vw,28px) + env(safe-area-inset-right, 0px))",
+            bottom: "calc(clamp(12px,3vw,28px) + env(safe-area-inset-bottom, 0px))",
             zIndex: 200,
             width: "min(390px, calc(100vw - 24px))",
-            height: "min(580px, calc(100vh - 24px))",
+            maxWidth: "calc(100vw - 24px - env(safe-area-inset-right, 0px) - env(safe-area-inset-left, 0px))",
+            height: "min(580px, calc(100dvh - 24px - env(safe-area-inset-bottom, 0px)))",
+            maxHeight: "calc(100dvh - 24px - env(safe-area-inset-bottom, 0px))",
             display: "flex",
             flexDirection: "column",
             background: panelBg,

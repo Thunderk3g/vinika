@@ -36,6 +36,7 @@ export default async function AppointmentsPage() {
         {rows.length === 0 ? (
           <div style={{ padding: 28, color: "var(--muted)" }}>No appointment requests yet.</div>
         ) : (
+          <div className="adm-tablewrap">
           <table className="adm-table">
             <thead>
               <tr>
@@ -70,6 +71,7 @@ export default async function AppointmentsPage() {
               })}
             </tbody>
           </table>
+          </div>
         )}
       </div>
     </div>
